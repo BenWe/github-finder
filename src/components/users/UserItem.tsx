@@ -1,23 +1,16 @@
 import React, { Component } from "react";
+import User from "../../models/User";
 
-interface Props {}
-interface State {
-  id: string;
-  login: string;
-  avatar_url: string;
-  html_url: string;
+interface Props {
+  user: User;
 }
+export interface State {}
 
 class UserItem extends Component<Props, State> {
-  state = {
-    id: "id",
-    login: "mojombo",
-    avatar_url: "https://avatars0.githubusercontent.com/u/1?v=4",
-    html_url: "https://github.com/mojombo",
-  };
+  state = {};
 
   render() {
-    const { login, avatar_url, html_url } = this.state;
+    const { login, avatar_url, html_url } = this.props.user;
 
     return (
       <div className="card text-center">
