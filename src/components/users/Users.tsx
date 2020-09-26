@@ -1,4 +1,5 @@
 import React from "react";
+import Spinner from "../layout/Spinner";
 import UserItem from "./UserItem";
 import User from "../../models/User";
 
@@ -7,14 +8,18 @@ interface Props {
   isLoading: boolean;
 }
 
-const Users = (props: Props) => {
-  return (
-    <div style={userStyle}>
-      {props.users.map((user) => (
-        <UserItem key={user.id} user={user} />
-      ))}
-    </div>
-  );
+const Users = ({ users, isLoading }: Props) => {
+  if (isLoading) {
+    return <Spinner />;
+  } else {
+    return (
+      <div style={userStyle}>
+        {users.map((user) => (
+          <UserItem key={user.id} user={user} />
+        ))}
+      </div>
+    );
+  }
 };
 
 const userStyle = {
