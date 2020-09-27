@@ -22,7 +22,11 @@ class App extends Component<Props, State> {
   async componentDidMount() {
     this.setState({ users: [], isLoading: true });
 
-    const response = await axios.get("https://api.github.com/users");
+    const response = await axios.get(
+      `https://api.github.com/users?
+      client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&
+      client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+    );
     const users: User[] = response.data;
 
     this.setState({ users: users, isLoading: false });
