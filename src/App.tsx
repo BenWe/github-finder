@@ -17,28 +17,26 @@ interface State {
 class App extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { users: [], isLoading: true };
+    this.state = { users: [], isLoading: false };
   }
 
-  async componentDidMount() {
+  searchUsers = async (text: string) => {
     this.setState({ users: [], isLoading: true });
 
-    const response = await axios.get(
-      `https://api.github.com/users?
-      client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&
-      client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
-    );
-    const users: User[] = response.data;
+    const queryString = `https://api.github.com/search/users?q=${text}&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`;
+
+    const response = await axios.get(queryString);
+    const users: User[] = response.data.items;
 
     this.setState({ users: users, isLoading: false });
-  }
+  };
 
   render() {
     return (
       <div className="App">
         <Navbar />
         <div className="container">
-          <Search />
+          <Search searchUsers={this.searchUsers} />
           <Users users={this.state.users} isLoading={this.state.isLoading} />
         </div>
       </div>

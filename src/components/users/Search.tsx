@@ -1,6 +1,8 @@
 import React, { ChangeEvent, Component, FormEvent } from "react";
 
-interface Props {}
+interface Props {
+  searchUsers(text: string): void;
+}
 interface State {
   text: string;
 }
@@ -16,7 +18,8 @@ class Search extends Component<Props, State> {
 
   onSubmit = (event: FormEvent) => {
     event.preventDefault();
-    console.log(this.state.text);
+    this.props.searchUsers(this.state.text);
+    this.setState({ text: "" });
   };
 
   render() {
