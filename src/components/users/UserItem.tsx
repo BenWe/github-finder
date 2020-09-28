@@ -1,8 +1,8 @@
 import React from "react";
-import User from "../../models/User";
+import IUser from "../../models/IUser";
 
 interface Props {
-  user: User;
+  user: IUser;
 }
 
 const UserItem = ({ user: { login, avatar_url, html_url } }: Props) => {

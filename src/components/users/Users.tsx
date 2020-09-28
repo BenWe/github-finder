@@ -1,10 +1,10 @@
 import React from "react";
 import Spinner from "../layout/Spinner";
 import UserItem from "./UserItem";
-import User from "../../models/User";
+import IUser from "../../models/IUser";
 
 interface Props {
-  users: User[];
+  users: IUser[];
   isLoading: boolean;
 }
 

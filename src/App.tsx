@@ -8,14 +8,17 @@ import Alert from "./components/layout/Alert";
 import About from "./components/pages/About";
 import Search from "./components/users/Search";
 import Users from "./components/users/Users";
+
 import IAlert from "./models/IAlert";
-import User from "./models/User";
+import IUser from "./models/IUser";
+
 import "./App.css";
 
 interface Props {}
 
 interface State {
-  users: User[];
+  users: IUser[];
+  user?: IUser;
   isLoading: boolean;
   alert?: IAlert;
 }
@@ -23,8 +26,19 @@ interface State {
 class App extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { users: [], isLoading: false };
+    this.state = { users: [], user: undefined, isLoading: false };
   }
+
+  getUser = async (username: string) => {
+    this.setState({ users: [], isLoading: true });
+
+    const queryString = `https://api.github.com/users/${username}?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`;
+
+    const response = await axios.get(queryString);
+    const user: IUser = response.data;
+
+    this.setState({ user: user, isLoading: false });
+  };
 
   clearUsers = () => {
     this.setState({ users: [], isLoading: false });
@@ -36,7 +50,7 @@ class App extends Component<Props, State> {
     const queryString = `https://api.github.com/search/users?q=${text}&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`;
 
     const response = await axios.get(queryString);
-    const users: User[] = response.data.items;
+    const users: IUser[] = response.data.items;
 
     this.setState({ users: users, isLoading: false });
   };
