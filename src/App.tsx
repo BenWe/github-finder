@@ -2,8 +2,10 @@ import axios from "axios";
 
 import React, { Component } from "react";
 import Navbar from "./components/layout/Navbar";
+import Alert from "./components/layout/Alert";
 import Search from "./components/users/Search";
 import Users from "./components/users/Users";
+import IAlert from "./models/IAlert";
 import User from "./models/User";
 import "./App.css";
 
@@ -12,6 +14,7 @@ interface Props {}
 interface State {
   users: User[];
   isLoading: boolean;
+  alert?: IAlert;
 }
 
 class App extends Component<Props, State> {
@@ -19,6 +22,10 @@ class App extends Component<Props, State> {
     super(props);
     this.state = { users: [], isLoading: false };
   }
+
+  clearUsers = () => {
+    this.setState({ users: [], isLoading: false });
+  };
 
   searchUsers = async (text: string) => {
     this.setState({ users: [], isLoading: true });
@@ -31,8 +38,10 @@ class App extends Component<Props, State> {
     this.setState({ users: users, isLoading: false });
   };
 
-  clearUsers = () => {
-    this.setState({ users: [], isLoading: false });
+  setAlert = async (text: string, type: string) => {
+    this.setState({ alert: { text, type } });
+
+    setTimeout(() => this.setState({ alert: undefined }), 5000);
   };
 
   render() {
@@ -42,10 +51,12 @@ class App extends Component<Props, State> {
       <div className="App">
         <Navbar />
         <div className="container">
+          <Alert alert={this.state.alert} />
           <Search
             searchUsers={this.searchUsers}
             clearUsers={this.clearUsers}
             shouldShowClear={users.length > 0}
+            setAlert={this.setAlert}
           />
           <Users users={users} isLoading={isLoading} />
         </div>

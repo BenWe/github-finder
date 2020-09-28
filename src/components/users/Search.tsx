@@ -1,8 +1,9 @@
 import React, { ChangeEvent, Component, FormEvent } from "react";
 
 interface Props {
-  searchUsers(text: string): void;
   clearUsers(): void;
+  searchUsers(text: string): void;
+  setAlert(text: string, type: string): void;
 
   shouldShowClear: boolean;
 }
@@ -21,8 +22,13 @@ class Search extends Component<Props, State> {
 
   onSubmit = (event: FormEvent) => {
     event.preventDefault();
-    this.props.searchUsers(this.state.text);
-    this.setState({ text: "" });
+    const text = this.state.text;
+    if (text === "") {
+      this.props.setAlert("Please enter something", "light");
+    } else {
+      this.props.searchUsers(text);
+      this.setState({ text: "" });
+    }
   };
 
   render() {
