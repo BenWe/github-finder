@@ -31,13 +31,23 @@ class App extends Component<Props, State> {
     this.setState({ users: users, isLoading: false });
   };
 
+  clearUsers = () => {
+    this.setState({ users: [], isLoading: false });
+  };
+
   render() {
+    const { users, isLoading }: State = this.state;
+
     return (
       <div className="App">
         <Navbar />
         <div className="container">
-          <Search searchUsers={this.searchUsers} />
-          <Users users={this.state.users} isLoading={this.state.isLoading} />
+          <Search
+            searchUsers={this.searchUsers}
+            clearUsers={this.clearUsers}
+            shouldShowClear={users.length > 0}
+          />
+          <Users users={users} isLoading={isLoading} />
         </div>
       </div>
     );

@@ -2,6 +2,9 @@ import React, { ChangeEvent, Component, FormEvent } from "react";
 
 interface Props {
   searchUsers(text: string): void;
+  clearUsers(): void;
+
+  shouldShowClear: boolean;
 }
 interface State {
   text: string;
@@ -39,6 +42,14 @@ class Search extends Component<Props, State> {
             className="btn btn-dark btn-block"
           />
         </form>
+        {this.props.shouldShowClear && (
+          <button
+            className="btn btn-light btn-block"
+            onClick={this.props.clearUsers}
+          >
+            Clear
+          </button>
+        )}
       </div>
     );
   }
