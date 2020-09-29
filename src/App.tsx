@@ -12,6 +12,7 @@ import User from "./components/users/User";
 
 import IAlert from "./models/IAlert";
 import IUser from "./models/IUser";
+import IRepo from "./models/IRepo";
 
 import "./App.css";
 
@@ -20,6 +21,7 @@ interface Props {}
 interface State {
   users: IUser[];
   user?: IUser;
+  repos: IRepo[];
   isLoading: boolean;
   alert?: IAlert;
 }
@@ -27,7 +29,7 @@ interface State {
 class App extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { users: [], user: undefined, isLoading: false };
+    this.state = { users: [], repos: [], isLoading: false };
   }
 
   getUser = async (username: string) => {
@@ -39,6 +41,17 @@ class App extends Component<Props, State> {
     const user: IUser = response.data;
 
     this.setState({ user: user, isLoading: false });
+  };
+
+  getRepos = async (username: string) => {
+    this.setState({ isLoading: true });
+
+    const queryString = `https://api.github.com/users/${username}/repos?per_page=5&sort=created:asc&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`;
+
+    const response = await axios.get(queryString);
+    const repos: IRepo[] = response.data;
+
+    this.setState({ repos: repos, isLoading: false });
   };
 
   clearUsers = () => {
@@ -63,7 +76,7 @@ class App extends Component<Props, State> {
   };
 
   render() {
-    const { user, users, isLoading }: State = this.state;
+    const { user, users, repos, isLoading }: State = this.state;
 
     return (
       <Router>
@@ -95,7 +108,9 @@ class App extends Component<Props, State> {
                   <User
                     {...props}
                     getUser={this.getUser}
+                    getRepos={this.getRepos}
                     user={user}
+                    repos={repos}
                     isLoading={isLoading}
                   />
                 )}

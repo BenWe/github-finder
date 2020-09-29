@@ -2,12 +2,16 @@ import React, { Component, Fragment } from "react";
 import { Link, RouteComponentProps } from "react-router-dom";
 
 import Spinner from "../layout/Spinner";
+import Repos from "../repos/Repos";
 
 import IUser from "../../models/IUser";
+import IRepo from "../../models/IRepo";
 
 interface Props extends RouteComponentProps<MatchParams> {
   getUser(username: string): void;
+  getRepos(username: string): void;
   user?: IUser;
+  repos: IRepo[];
   isLoading: boolean;
 }
 
@@ -20,10 +24,11 @@ interface State {}
 class User extends Component<Props, State> {
   componentDidMount() {
     this.props.getUser(this.props.match.params.login);
+    this.props.getRepos(this.props.match.params.login);
   }
 
   render() {
-    const { isLoading, user } = this.props;
+    const { isLoading, user, repos } = this.props;
 
     if (isLoading) {
       return <Spinner />;
@@ -112,6 +117,7 @@ class User extends Component<Props, State> {
             </div>
             <div className="badge badge-dark">Public Gists: {public_gists}</div>
           </div>
+          <Repos repos={repos} />
         </Fragment>
       );
     }
