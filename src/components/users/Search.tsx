@@ -1,19 +1,13 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useContext, useState } from "react";
+
+import GithubContext from "../../context/github/GithubContext";
 
 interface Props {
-  clearUsers(): void;
-  searchUsers(text: string): void;
   setAlert(text: string, type: string): void;
-
-  shouldShowClear: boolean;
 }
 
-const Search = ({
-  clearUsers,
-  searchUsers,
-  setAlert,
-  shouldShowClear,
-}: Props) => {
+const Search = ({ setAlert }: Props) => {
+  const githubContext = useContext(GithubContext);
   const [text, setText] = useState<string>("");
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -25,7 +19,7 @@ const Search = ({
     if (text === "") {
       setAlert("Please enter something", "light");
     } else {
-      searchUsers(text);
+      githubContext.searchUsers(text);
       setText("");
     }
   };
@@ -42,8 +36,11 @@ const Search = ({
         />
         <input type="submit" name="Search" className="btn btn-dark btn-block" />
       </form>
-      {shouldShowClear && (
-        <button className="btn btn-light btn-block" onClick={clearUsers}>
+      {githubContext.users.length > 0 && (
+        <button
+          className="btn btn-light btn-block"
+          onClick={githubContext.clearUsers}
+        >
           Clear
         </button>
       )}

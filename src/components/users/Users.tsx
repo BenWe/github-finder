@@ -1,14 +1,21 @@
-import React from "react";
+import React, { useContext } from "react";
+
 import Spinner from "../layout/Spinner";
 import UserItem from "./UserItem";
+
 import IUser from "../../models/IUser";
+
+import GithubContext from "../../context/github/GithubContext";
 
 interface Props {
   users: IUser[];
   isLoading: boolean;
 }
 
-const Users = ({ users, isLoading }: Props) => {
+const Users = () => {
+  const githubContext = useContext(GithubContext);
+  const { users, isLoading }: Props = githubContext;
+
   if (isLoading) {
     return <Spinner />;
   } else {

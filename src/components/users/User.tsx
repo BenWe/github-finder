@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useContext, useEffect } from "react";
 import { Link, RouteComponentProps } from "react-router-dom";
 
 import Spinner from "../layout/Spinner";
@@ -7,31 +7,36 @@ import Repos from "../repos/Repos";
 import IUser from "../../models/IUser";
 import IRepo from "../../models/IRepo";
 
-interface Props extends RouteComponentProps<MatchParams> {
-  getUser(username: string): void;
-  getRepos(username: string): void;
-  user?: IUser;
-  repos: IRepo[];
-  isLoading: boolean;
-}
+import GithubContext from "../../context/github/GithubContext";
+
+interface Props extends RouteComponentProps<MatchParams> {}
 
 interface MatchParams {
   login: string;
 }
 
-const User = ({ getUser, getRepos, user, repos, isLoading, match }: Props) => {
+interface ContextProps {
+  getUser(username: string): void;
+  getUserRepos(username: string): void;
+  user?: IUser;
+  repos: IRepo[];
+  isLoading: boolean;
+}
+
+const User = ({ match }: Props) => {
+  const githubContext = useContext(GithubContext);
+  const {
+    getUser,
+    getUserRepos,
+    user,
+    repos,
+    isLoading,
+  }: ContextProps = githubContext;
+
   useEffect(() => {
     getUser(match.params.login);
-    getRepos(match.params.login);
+    getUserRepos(match.params.login);
     // eslint-disable-next-line
-  }, []);
-
-  useEffect(() => {
-    console.log("effect will run once");
-  }, []);
-
-  useEffect(() => {
-    console.log("effect will always run");
   }, []);
 
   if (isLoading) {
