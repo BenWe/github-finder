@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
+import AlertContext from "../../context/alert/AlertContext";
 import IAlert from "../../models/IAlert";
 
 interface Props {
   alert?: IAlert;
 }
 
-const Alert = (props: Props) => {
-  const alert = props.alert;
+const Alert = () => {
+  const alertContext = useContext(AlertContext);
+  const { alert }: Props = alertContext;
+
   return (
     <div>
       {alert !== undefined && (
